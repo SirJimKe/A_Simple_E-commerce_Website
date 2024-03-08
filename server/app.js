@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectToDatabase from './db';
 import authRoutes from './routes/auth';
+import productRoutes from './routes/productRoutes';
+import reviewRoutes from './routes/reviewRoutes';
 
 
 dotenv.config();
@@ -14,6 +16,9 @@ async function startServer() {
 	const db = await connectToDatabase();
 
 	app.use('/auth', authRoutes);
+	app.use('/api', productRoutes);
+	app.use('/api', reviewRoutes);
+
 
 	process.on('SIGINT', async () => {
 	    console.log('Closing MongoDB connection');
