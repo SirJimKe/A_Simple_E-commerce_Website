@@ -1,0 +1,70 @@
+/* General Styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Homepage Layout */
+.home-page {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+/* Categories Section */
+.categories-section {
+  flex: 1;
+  min-width: 200px;
+  margin-right: 20px;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+}
+
+.categories-section h2 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 24px;
+}
+
+.categories-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.categories-section li {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.categories-section li:last-child {
+  border-bottom: none;
+}
+
+/* Product List Section */
+.product-list-section {
+  flex: 3;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.product-list-section h2 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 24px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home-page {
+    flex-direction: column;
+  }
+
+  .categories-section,
+  .product-list-section {
+    margin: 0 0 20px 0;
+    min-width: auto;
+  }
+}
