@@ -1,38 +1,63 @@
-import React, { useState } from 'react';
-import './productdetails.css'; // Import CSS file
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import './productdetails.css';
 
-const ProductDetails = ({ product }) => {
+const ProductDetails = () => {
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
 
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setProduct(data);
+            } catch (error) {
+                console.error('Error fetching product:', error);
+            }
+        };
+
+        fetchProduct();
+    }, [id]);
+
     const handleQuantityChange = (e) => {
-        setQuantity(parseInt(e.target.value));
+        const newQuantity = parseInt(e.target.value, 10);
+        if (newQuantity > 0) {
+            setQuantity(newQuantity);
+        }
     };
 
     const handleAddToCart = () => {
-        // You can implement add to cart functionality here
-        console.log(`Added ${quantity} ${product.title} to cart.`);
+        // Implement add to cart functionality here
+        console.log(`Added ${quantity} of ${product?.title} to cart.`);
     };
 
     const calculateAverageRating = () => {
-        const totalRatings = product.rating ? product.rating.count : 0;
-        const ratingSum = product.rating ? product.rating.rate * totalRatings : 0;
-        return totalRatings === 0 ? 0 : ratingSum / totalRatings;
+        if (!product || !product.rating) return 0;
+        const { rate, count } = product.rating;
+        return count === 0 ? 0 : (rate * count) / count;
     };
 
     const generateStars = (rating) => {
         const roundedRating = Math.round(rating);
-        const stars = [];
-        for (let i = 0; i < roundedRating; i++) {
-            stars.push(<span key={i}>&#9733;</span>);
-        }
-        return stars;
+        return Array.from({ length: roundedRating }, (_, i) => (
+            <span key={i}>&#9733;</span>
+        ));
     };
+
+    if (!product) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="product-details-container">
-	    <div className="product-image-container">
-		<img src={product.image} alt={product.title} className="product-image" />
-	    </div>
+            <div className="product-image-container">
+                <img src={product.image} alt={product.title} className="product-image" />
+            </div>
             <div className="product-info">
                 <h2>{product.title}</h2>
                 <p className="description">{product.description}</p>
@@ -45,11 +70,12 @@ const ProductDetails = ({ product }) => {
                     {product.rating && product.rating.count === 0 && "This product has no ratings yet."}
                 </p>
             </div>
+	    <Link to="/products" className="back-to-products">View Other Products</Link>
             <div className="customer-feedback">
                 <h3>Customer Feedback</h3>
-                {product.rating && product.rating.count > 0 ? (
+                {product.comments && product.comments.length > 0 ? (
                     <ul>
-                        {product.comments && product.comments.map((comment, index) => (
+                        {product.comments.map((comment, index) => (
                             <li key={index}>
                                 <div>
                                     <p>{comment.text}</p>
@@ -62,6 +88,7 @@ const ProductDetails = ({ product }) => {
                     <p>This product has no customer feedback yet.</p>
                 )}
             </div>
+            {/* Back to products link */}
         </div>
     );
 };

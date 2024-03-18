@@ -1,70 +1,86 @@
-/* General Styles */
+/* Reset and General Styles */
 body, html {
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f4;
 }
 
-/* Homepage Layout */
-.home-page {
+/* Home Layout */
+.home {
   display: flex;
-  flex-wrap: wrap;
-  margin: 20px;
-}
-
-/* Categories Section */
-.categories-section {
-  flex: 1;
-  min-width: 200px;
-  margin-right: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  background-color: #f7f7f7;
-  border-radius: 8px;
 }
 
-.categories-section h2 {
-  margin-bottom: 15px;
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  margin-right: 30px;
+}
+
+.sidebar h2 {
+  font-size: 1.5rem;
   color: #333;
-  font-size: 24px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #333;
+  margin-bottom: 20px;
 }
 
-.categories-section ul {
+.category-list {
   list-style: none;
   padding: 0;
 }
 
-.categories-section li {
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.categories-section li:last-child {
-  border-bottom: none;
-}
-
-/* Product List Section */
-.product-list-section {
-  flex: 3;
-  padding: 20px;
+.category-item {
+  padding: 10px;
+  margin-bottom: 10px;
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
-.product-list-section h2 {
-  margin-bottom: 15px;
+.category-item:hover {
+  background-color: #eaeaea;
+}
+
+/* Content Styles */
+.content {
+  flex: 1;
+}
+
+.top-sellers {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.top-sellers h2 {
+  font-size: 1.5rem;
   color: #333;
-  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.view-all {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: #3273dc;
+  text-decoration: none;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .home-page {
+  .home {
     flex-direction: column;
   }
 
-  .categories-section,
-  .product-list-section {
-    margin: 0 0 20px 0;
-    min-width: auto;
+  .sidebar {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .content {
+    width: 100%;
   }
 }

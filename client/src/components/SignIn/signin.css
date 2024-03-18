@@ -1,0 +1,107 @@
+.signin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff; /* Updated to pure white for a clean, modern look */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  width: 100%;
+  max-width: 400px; /* Standard width for sign-in forms */
+  margin: 40px auto; /* Increased top and bottom margin for better spacing */
+  padding: 2rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Larger shadow for more depth */
+  border-radius: 8px;
+}
+
+h2 {
+  color: #333;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.input {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.sign-btn {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.signup-link {
+  margin-top: 2rem;
+}
+
+.signup-link p {
+  color: #666;
+  font-size: 1rem;
+}
+
+.signup-link a {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.signup-link a:hover {
+  color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .signin-container {
+    padding: 1rem;
+    max-width: 90%;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .label,
+  .input,
+  .button.sign-btn,
+  .signup-link p {
+    font-size: 0.9rem;
+  }
+
+  .button.sign-btn {
+    padding: 0.75rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .signin-container {
+    max-width: 500px;
+  }
+}
