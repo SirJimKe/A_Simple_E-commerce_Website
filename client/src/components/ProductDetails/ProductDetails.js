@@ -30,21 +30,21 @@ const ProductDetails = ({ cartItems }) => {
     }, [id]);
 
     const handleQuantityChange = (e) => {
-        const newQuantity = parseInt(e.target.value, 10);
-        if (newQuantity > 0) {
-            setQuantity(newQuantity);
+        const value = e.target.value;
+        if (!isNaN(value) && parseInt(value) >= 0) {
+            setQuantity(parseInt(value));
         }
     };
 
     const handleAddToCart = () => {
         if (!product) return;
-	const productToAdd = {
-	    id: product.id,
-	    title: product.title,
-	    price: product.price,
-	    image: product.image,
-	    quantity: quantity
-	};
+        const productToAdd = {
+            id: product.id,
+            title: product.title,
+            price: product.price,
+            image: product.image,
+            quantity: quantity
+        };
         addToCart(productToAdd);
         setFeedbackMessage(`Added ${quantity} ${product.title} to cart`);
         setQuantity(1);

@@ -7,6 +7,8 @@ import './home.css';
 const Home = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -14,6 +16,7 @@ const Home = () => {
                 const response = await fetch('https://fakestoreapi.com/products');
                 const data = await response.json();
                 setProducts(data);
+                setFilteredProducts(data);
             } catch (error) {
                 console.error('Error fetching products:', error);
             }
@@ -26,14 +29,29 @@ const Home = () => {
         setSelectedProduct(product);
     };
 
+    const extractCategories = () => {
+        const categories = new Set(products.map(product => product.category));
+        return [''].concat(Array.from(categories));
+    };
+
+    const handleCategoryClick = (category) => {
+        setSelectedCategory(category);
+        if (category === '') {
+            setFilteredProducts(products);
+        } else {
+            const filtered = products.filter(product => product.category === category);
+            setFilteredProducts(filtered);
+        }
+    };
+
     return (
         <div className="home">
             <aside className="sidebar">
                 <h2>Categories</h2>
                 <ul className="category-list">
                     {/* List of categories */}
-                    {['Electronics', 'Mobile Phones & Tablets', 'Vehicles', 'Laptops and PCs', 'Services', 'Pets', 'Properties', 'Software', 'Fashion', 'Agriculture & Food'].map((category, index) => (
-                        <li key={index} className="category-item">{category}</li>
+                    {extractCategories().map((category, index) => (
+                        <li key={index} className={`category-item ${selectedCategory === category ? 'active' : ''}`} onClick={() => handleCategoryClick(category)}>{category || 'All'}</li>
                     ))}
                 </ul>
             </aside>
@@ -41,8 +59,8 @@ const Home = () => {
                 <section className="top-sellers">
                     <h2>Top Selling Items</h2>
                     <Link to="/products" className="view-all">View All Products</Link>
-                    {/* Ensure ProductList can handle onSelectProduct prop */}
-                    <ProductList products={products} onSelectProduct={handleProductSelect} />
+                    {/* Pass filtered products to ProductList */}
+                    <ProductList products={filteredProducts} onSelectProduct={handleProductSelect} />
                 </section>
                 {/* Render ProductDetails only if selectedProduct is not null */}
                 {selectedProduct && (

@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { CartContext } from '../../contexts/CartContext';
 import './navbar.css';
 
-const Navbar = () => {
-    const [searchQuery, setSearchQuery] = useState('');
+const Navbar = ({ products }) => {
+    const isAuthenticated = localStorage.getItem('token');
+    const { cartItemCount } = useContext(CartContext);
     const navigate = useNavigate();
-
+    const [searchQuery, setSearchQuery] = useState('');
+    
     const handleSearch = () => {
         navigate(`/search?q=${searchQuery}`);
     };
@@ -27,12 +30,17 @@ const Navbar = () => {
                         <button className="button is-primary" onClick={handleSearch}>Search</button>
                     </div>
                 </div>
-                {/* Render links based on user authentication status */}
-                <div className="navbar-end">
-                    <Link to="/sign-in" className="navbar-item sign-in">Sign In</Link>
-                    <Link to="/cart" className="navbar-item">Cart</Link>
+		<div className="navbar-end">
+                    {isAuthenticated ? (
+                        <Link to="/my-account" className="navbar-item">My Account</Link>
+                    ) : (
+                        <Link to="/sign-in" className="navbar-item sign-in">Sign In</Link>
+                    )}
+                    <Link to="/cart" className="navbar-item">
+                        Cart {cartItemCount > 0 ? <span className="cart-count">{cartItemCount}</span> : '0'}
+                    </Link>
                 </div>
-            </div>
+	    </div>
         </nav>
     );
 };
