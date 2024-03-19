@@ -13,8 +13,6 @@ export const CartProvider = ({ children }) => {
     }, []);
 
 
-    console.log(cartItems);
-
     const addToCart = (product) => {
         const existingItemIndex = cartItems.findIndex((item) => item.id === product.id);
         const updatedCartItems = [...cartItems];

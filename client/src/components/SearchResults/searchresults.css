@@ -1,0 +1,29 @@
+/* SearchResults.css */
+.search-results-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.search-results-title {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.search-results-message {
+  font-size: 1rem;
+  color: #666;
+}
+
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .search-results-container {
+    padding: 1rem;
+  }
+
+  .search-results-title {
+    font-size: 1.2rem;
+  }
+}

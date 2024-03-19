@@ -1,11 +1,14 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { CartContext } from '../../contexts/CartContext';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './navbar.css';
 
 const Navbar = () => {
-    const isAuthenticated = localStorage.getItem('token');
-    const { cartItemCount } = useContext(CartContext);
+    const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
+
+    const handleSearch = () => {
+        navigate(`/search?q=${searchQuery}`);
+    };
 
     return (
         <nav className="navbar">
@@ -15,21 +18,19 @@ const Navbar = () => {
             <div className="navbar-menu">
                 <div className="navbar-start">
                     <div className="navbar-item">
-                        {/* Search component to be implemented for better structure */}
-                        <input type="text" placeholder="I am looking for..." />
-                        <button className="button is-primary">Search</button>
+                        <input
+                            type="text"
+                            placeholder="I am looking for..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                        <button className="button is-primary" onClick={handleSearch}>Search</button>
                     </div>
                 </div>
+                {/* Render links based on user authentication status */}
                 <div className="navbar-end">
-                    {/* Render links based on user authentication status */}
-                    {isAuthenticated ? (
-                        <Link to="/my-account" className="navbar-item">My Account</Link>
-                    ) : (
-                        <Link to="/sign-in" className="navbar-item sign-in">Sign In</Link>
-                    )}
-                    <Link to="/cart" className="navbar-item">
-                        Cart {cartItemCount > 0 ? <span className="cart-count">{cartItemCount}</span> : '0'}
-                    </Link>
+                    <Link to="/sign-in" className="navbar-item sign-in">Sign In</Link>
+                    <Link to="/cart" className="navbar-item">Cart</Link>
                 </div>
             </div>
         </nav>
