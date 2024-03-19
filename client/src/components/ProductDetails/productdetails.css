@@ -70,6 +70,23 @@
   background-color: #4cae4c;
 }
 
+.feedback-message {
+    background-color: #f0f4c3;
+    color: #245021;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    font-size: 0.9em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.feedback-message:hover {
+    background-color: #e6ee9c;
+}
+
+
 .average-rating {
   font-size: 1rem;
   color: #f39c12;

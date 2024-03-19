@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { CartContext } from '../../contexts/CartContext';
 import './productdetails.css';
 
-const ProductDetails = () => {
+const ProductDetails = ({ cartItems }) => {
+    const { addToCart } = useContext(CartContext);
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
+    const [feedbackMessage, setFeedbackMessage] = useState('');
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -18,6 +22,7 @@ const ProductDetails = () => {
                 setProduct(data);
             } catch (error) {
                 console.error('Error fetching product:', error);
+                setError('Failed to fetch product details');
             }
         };
 
@@ -32,8 +37,17 @@ const ProductDetails = () => {
     };
 
     const handleAddToCart = () => {
-        // Implement add to cart functionality here
-        console.log(`Added ${quantity} of ${product?.title} to cart.`);
+        if (!product) return;
+	const productToAdd = {
+	    id: product.id,
+	    title: product.title,
+	    price: product.price,
+	    image: product.image,
+	    quantity: quantity
+	};
+        addToCart(productToAdd);
+        setFeedbackMessage(`Added ${quantity} ${product.title} to cart`);
+        setQuantity(1);
     };
 
     const calculateAverageRating = () => {
@@ -48,6 +62,10 @@ const ProductDetails = () => {
             <span key={i}>&#9733;</span>
         ));
     };
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     if (!product) {
         return <div>Loading...</div>;
@@ -65,12 +83,13 @@ const ProductDetails = () => {
                 <label htmlFor="quantity">Quantity:</label>
                 <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} min="1" />
                 <button className="add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
+                {feedbackMessage && <p className="feedback-message">{feedbackMessage}</p>}
                 <p className="average-rating">
                     Average Rating: {generateStars(calculateAverageRating())}
                     {product.rating && product.rating.count === 0 && "This product has no ratings yet."}
                 </p>
             </div>
-	    <Link to="/products" className="back-to-products">View Other Products</Link>
+            <Link to="/products" className="back-to-products">View Other Products</Link>
             <div className="customer-feedback">
                 <h3>Customer Feedback</h3>
                 {product.comments && product.comments.length > 0 ? (
@@ -88,7 +107,6 @@ const ProductDetails = () => {
                     <p>This product has no customer feedback yet.</p>
                 )}
             </div>
-            {/* Back to products link */}
         </div>
     );
 };
