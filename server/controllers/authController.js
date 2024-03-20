@@ -7,6 +7,11 @@ export const signup = async (req, res) => {
     const { username, email, password } = req.body;
 
     try {
+        const existingUsername = await User.findOne({ username });
+        if (existingUsername) {
+            return res.status(400).json({ message: 'Username already exists.' });
+        }
+
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists with this email.' });
@@ -14,12 +19,12 @@ export const signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-	const newUser = new User({
+        const newUser = new User({
             username,
             email,
             password: hashedPassword,
         });
-	await newUser.save();
+        await newUser.save();
 
         return res.status(201).json({ message: 'User created successfully.' });
     } catch (error) {
@@ -28,37 +33,38 @@ export const signup = async (req, res) => {
     }
 };
 
-
 // Login controller
 export const login = async (req, res) => {
     try {
-	const { email, password } = req.body;
+        const { usernameOrEmail, password } = req.body;
 
-	const user = await User.findOne({ email });
-	if (!user) {
-	    return res.status(404).json({
-		message: 'User not found'
-	    });
-	}
+        const user = await User.findOne({
+            $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }]
+        });
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
 
-	const passwordMatch = await bcrypt.compare(password, user.password);
-	if (!passwordMatch) {
-	    return res.status(401).json({
-		message: 'Invalid credentials'
-	    });
-	}
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (!passwordMatch) {
+            return res.status(401).json({
+                message: 'Invalid credentials'
+            });
+        }
 
-	const token = jwt.sign(
-	    { userId: user._id },
-	    process.env.JWT_SECRET,
-	    { expiresIn: '1h' });
+        const token = jwt.sign(
+            { userId: user._id },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' });
 
-	res.status(200).json({ token });
+        res.status(200).json({ token });
     } catch (error) {
-	console.error(error);
-	res.status(500).json({
-	    message: 'Internal server error'
-	});
+        console.error(error);
+        res.status(500).json({
+            message: 'Internal server error'
+        });
     }
 };
 

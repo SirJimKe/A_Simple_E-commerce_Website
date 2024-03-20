@@ -1,19 +1,46 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './signin.css';
 
 const SignIn = () => {
     const [usernameOrEmail, setUsernameOrEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    const handleSignIn = () => {
-        // Handle sign-in logic here
-        console.log('Signing in...');
-    }
+    const handleSignIn = async () => {
+        try {
+            const response = await fetch('/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    usernameOrEmail,
+                    password
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token);
+                navigate('/my-account');
+            } else {
+                const data = await response.json();
+                setError(data.message);
+            }
+        } catch (error) {
+            console.error('Error signing in:', error);
+            setError('An error occurred while signing in. Please try again later.');
+        } finally {
+            setPassword('');
+        }
+    };
 
     return (
         <div className="signin-container">
             <h2>Sign In</h2>
+            {error && <div className="error">{error}</div>}
             <div className="field">
                 <label className="label">Email or Username</label>
                 <div className="control">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './signup.css';
 
 const SignUp = () => {
@@ -8,21 +8,53 @@ const SignUp = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordMatch, setPasswordMatch] = useState(true);
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    const handleSignUp = () => {
-        // Handle sign-up logic here
-        console.log('Signing up...');
-    }
+    const handleSignUp = async () => {
+        try {
+            if (password !== confirmPassword) {
+                setPasswordMatch(false);
+                return;
+            }
+
+            const response = await fetch('/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    email,
+                    password
+                })
+            });
+
+            if (response.ok) {
+                navigate('/sign-in');
+            } else {
+                const data = await response.json();
+                setError(data.message);
+            }
+        } catch (error) {
+            console.error('Error signing up:', error);
+            setError('An error occurred while signing up. Please try again later.');
+        } finally {
+            setPassword('');
+            setConfirmPassword('');
+        }
+    };
 
     const handleConfirmPasswordChange = (e) => {
         const confirmPasswordValue = e.target.value;
         setConfirmPassword(confirmPasswordValue);
         setPasswordMatch(confirmPasswordValue === password);
-    }
+    };
 
     return (
         <div className="signup-container">
             <h2>Sign Up</h2>
+            {error && <div className="error">{error}</div>}
             <div className="field">
                 <label className="label">Username</label>
                 <div className="control">
