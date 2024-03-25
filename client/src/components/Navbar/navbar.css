@@ -90,6 +90,20 @@
     vertical-align: top;
 }
 
+.navbar-item.mng-products {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.navbar-item.mng-products:hover {
+    background-color: #45a049;
+}
+
 @media screen and (max-width: 768px) {
     .navbar {
         padding: 0 10px;

@@ -37,7 +37,10 @@ const Navbar = ({ products }) => {
                 </div>
                 <div className="navbar-end">
                     {isAuthenticated ? (
-                        <button className="navbar-item log-out" onClick={handleLogout}>Logout</button>
+                        <>
+                            <Link to="/manage-products" className="navbar-item mng-products">Manage Products</Link>
+                            <button className="navbar-item log-out" onClick={handleLogout}>Logout</button>
+                        </>
                     ) : (
                         <Link to="/sign-in" className="navbar-item sign-in">Sign In</Link>
                     )}

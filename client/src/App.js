@@ -6,6 +6,7 @@ import Home from './pages/Home/Home';
 import SignIn from './components/SignIn/SignIn';
 import SignUp from './components/SignUp/SignUp';
 import ProductsPage from './pages/ProductsPage/ProductsPage';
+import ProductManagement from './pages/ProductManagement/ProductManagement';
 import ProductDetails from './components/ProductDetails/ProductDetails';
 import Cart from './components/Cart/Cart';
 import SearchResults from './components/SearchResults/SearchResults';
@@ -37,6 +38,7 @@ const App = () => {
                             <Route path="/cart" element={<Cart />} />
                             <Route path="/products" element={<ProductsPage />} />
                             <Route path="/products/:id" element={<ProductDetails />} />
+			    <Route path="/manage-products" element={<ProductManagement />} />
                             <Route path="/sign-in" element={<SignIn />} />
                             <Route path="/sign-up" element={<SignUp />} />
                             <Route path="/search" element={<SearchResults products={products} />} />
