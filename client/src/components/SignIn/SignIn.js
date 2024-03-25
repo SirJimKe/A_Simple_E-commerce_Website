@@ -24,7 +24,7 @@ const SignIn = () => {
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
-                navigate('/my-account');
+                navigate('/');
             } else {
                 const data = await response.json();
                 setError(data.message);

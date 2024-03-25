@@ -8,9 +8,14 @@ const Navbar = ({ products }) => {
     const { cartItemCount } = useContext(CartContext);
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');
-    
+
     const handleSearch = () => {
         navigate(`/search?q=${searchQuery}`);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/');
     };
 
     return (
@@ -30,9 +35,9 @@ const Navbar = ({ products }) => {
                         <button className="button is-primary" onClick={handleSearch}>Search</button>
                     </div>
                 </div>
-		<div className="navbar-end">
+                <div className="navbar-end">
                     {isAuthenticated ? (
-                        <Link to="/my-account" className="navbar-item">My Account</Link>
+                        <button className="navbar-item log-out" onClick={handleLogout}>Logout</button>
                     ) : (
                         <Link to="/sign-in" className="navbar-item sign-in">Sign In</Link>
                     )}
@@ -40,7 +45,7 @@ const Navbar = ({ products }) => {
                         Cart {cartItemCount > 0 ? <span className="cart-count">{cartItemCount}</span> : '0'}
                     </Link>
                 </div>
-	    </div>
+            </div>
         </nav>
     );
 };

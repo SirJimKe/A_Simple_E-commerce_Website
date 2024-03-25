@@ -66,6 +66,20 @@
     background-color: #2759b5;
 }
 
+.navbar-item.log-out {
+    background-color: #ff3860;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.navbar-item.log-out:hover {
+    background-color: #d32f4e;
+}
+
 .cart-count {
     background-color: #ff3860;
     color: white;
