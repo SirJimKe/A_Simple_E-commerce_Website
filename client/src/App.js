@@ -17,39 +17,34 @@ const App = () => {
     const [userRole, setUserRole] = useState('');
 
     useEffect(() => {
-        const fetchUserRole = async () => {
+	const fetchData = async () => {
             try {
 		const token = localStorage.getItem('token');
 		if (!token) {
                     throw new Error('Authorization token is missing');
 		}
-                const response = await fetch('/api/user/details', {
+
+		// Fetch user role
+		const userResponse = await fetch('/api/user/details', {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${token}`
+			'Authorization': `Bearer ${token}`
                     }
-                });
-                const data = await response.json();
-                setUserName(data.username);
-                setUserRole(data.role);
-		console.log(data);
-            } catch (error) {
-                console.error('Error fetching user role:', error);
-            }
-        };
+		});
+		const userData = await userResponse.json();
+		setUserName(userData.username);
+		setUserRole(userData.role);
 
-        const fetchProducts = async () => {
-            try {
-                const response = await fetch('https://fakestoreapi.com/products');
-                const data = await response.json();
-                setProducts(data);
+		// Fetch products
+		const productsResponse = await fetch('/api/products');
+		const productsData = await productsResponse.json();
+		setProducts(productsData);
             } catch (error) {
-                console.error('Error fetching products:', error);
+		console.error('Error fetching data:', error);
             }
-        };
+	};
 
-        fetchUserRole();
-        fetchProducts();
+	fetchData();
     }, []);
 
     return (
@@ -61,7 +56,7 @@ const App = () => {
                         <Routes>
                             <Route path="/cart" element={<Cart />} />
                             <Route path="/products" element={<ProductsPage />} />
-                            <Route path="/products/:id" element={<ProductDetails />} />
+                            <Route path="/products/:_id" element={<ProductDetails />} />
                             <Route path="/manage-products" element={<ProductManagement userRole={userRole} />} />
                             <Route path="/sign-in" element={<SignIn />} />
                             <Route path="/sign-up" element={<SignUp />} />

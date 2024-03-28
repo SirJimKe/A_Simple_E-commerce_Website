@@ -5,7 +5,7 @@ import './productdetails.css';
 
 const ProductDetails = ({ cartItems }) => {
     const { addToCart } = useContext(CartContext);
-    const { id } = useParams();
+    const { _id } = useParams();
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [feedbackMessage, setFeedbackMessage] = useState('');
@@ -17,7 +17,7 @@ const ProductDetails = ({ cartItems }) => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+                const response = await fetch(`/api/products/${_id}`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -30,7 +30,7 @@ const ProductDetails = ({ cartItems }) => {
         };
 
         fetchProduct();
-    }, [id]);
+    }, [_id]);
 
     const handleQuantityChange = (e) => {
         const value = e.target.value;
@@ -42,8 +42,8 @@ const ProductDetails = ({ cartItems }) => {
     const handleAddToCart = () => {
         if (!product) return;
         const productToAdd = {
-            id: product.id,
-            title: product.title,
+            _id: product._id,
+            name: product.name,
             price: product.price,
             image: product.image,
             quantity: quantity
@@ -88,10 +88,10 @@ const ProductDetails = ({ cartItems }) => {
     return (
         <div className="product-details-container">
             <div className="product-image-container">
-                <img src={product.image} alt={product.title} className="product-image" />
+                <img src={product.image} alt={product.name} className="product-image" />
             </div>
             <div className="product-info">
-                <h2>{product.title}</h2>
+                <h2>{product.name}</h2>
                 <p className="description">{product.description}</p>
                 <p className="price">Price: ${product.price}</p>
                 <label htmlFor="quantity">Quantity:</label>
