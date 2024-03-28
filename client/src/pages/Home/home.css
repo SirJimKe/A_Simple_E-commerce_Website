@@ -6,6 +6,18 @@ body, html {
   background-color: #f4f4f4;
 }
 
+/* Greeting Styles */
+.greeting {
+  font-size: 1.5rem;
+  color: #fff;
+  background-color: #3273dc;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
 /* Home Layout */
 .home {
   display: flex;

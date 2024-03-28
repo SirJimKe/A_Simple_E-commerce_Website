@@ -42,6 +42,7 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    margin-left: 5px; /* Added margin to separate buttons */
 }
 
 .edit-button:hover,
@@ -63,11 +64,19 @@
     background-color: #c82333;
 }
 
-.warning-message {
-    background-color: #ffc107;
-    color: #333;
-    padding: 10px;
+.product-management .delete-confirmation {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
     border-radius: 4px;
-    margin-top: 20px;
-    font-size: 1.2em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.product-management .delete-confirmation p {
+    margin-bottom: 10px;
+}
+
+.product-management .delete-confirmation button:hover {
+    background-color: #c82333;
 }

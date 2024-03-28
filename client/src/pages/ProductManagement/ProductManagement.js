@@ -5,7 +5,7 @@ import './productmanagement.css';
 const ProductManagement = ({ userRole }) => {
     const [products, setProducts] = useState([]);
     const [editingProductId, setEditingProductId] = useState(null);
-    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [deleteConfirmationProductId, setDeleteConfirmationProductId] = useState(null); // Track delete confirmation for specific product
     const [errorMessage, setErrorMessage] = useState('');
 
     const token = localStorage.getItem('token');
@@ -29,25 +29,25 @@ const ProductManagement = ({ userRole }) => {
     };
 
     const handleAddProduct = async (formData) => {
-	try {
+        try {
             const response = await fetch('/api/products', {
-		method: 'POST',
-		headers: {
+                method: 'POST',
+                headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
-		},
-		body: JSON.stringify(formData)
+                },
+                body: JSON.stringify(formData)
             });
             if (response.ok) {
-		await fetchProducts();
+                await fetchProducts();
             } else {
-		console.error('Failed to add product');
-		setErrorMessage('Failed to add product');
+                console.error('Failed to add product');
+                setErrorMessage('Failed to add product');
             }
-	} catch (error) {
+        } catch (error) {
             console.error('Error adding product:', error);
             setErrorMessage('Error adding product');
-	}
+        }
     };
 
     const handleEditProduct = async (formData) => {
@@ -56,7 +56,7 @@ const ProductManagement = ({ userRole }) => {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-		    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(formData)
             });
@@ -77,7 +77,7 @@ const ProductManagement = ({ userRole }) => {
         try {
             const response = await fetch(`/api/products/${productId}`, {
                 method: 'DELETE',
-		headers: {
+                headers: {
                     'Authorization': `Bearer ${token}`
                 },
             });
@@ -101,48 +101,41 @@ const ProductManagement = ({ userRole }) => {
         setEditingProductId(null);
     };
 
-    const handleShowDeleteConfirmation = () => {
-        setShowDeleteConfirmation(true);
+    const handleShowDeleteConfirmation = (productId) => {
+        setDeleteConfirmationProductId(productId);
     };
 
     const handleConfirmDelete = (productId) => {
         handleDeleteProduct(productId);
-        setShowDeleteConfirmation(false);
+        setDeleteConfirmationProductId(null);
     };
 
     const handleCancelDelete = () => {
-        setShowDeleteConfirmation(false);
+        setDeleteConfirmationProductId(null);
     };
 
     return (
         <div className="product-management">
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
-            {userRole === 'admin' ? (
-                <>
-                    <h2 className="product-management-title">Add/Edit Products</h2>
-                    <ProductForm onSubmit={editingProductId ? handleEditProduct : handleAddProduct} initialValues={products.find(product => product._id === editingProductId)} />
-                    {editingProductId && <button className="cancel-edit-button" onClick={handleCancelEdit}>Cancel Edit</button>}
-                    <h2 className="product-management-title">Products</h2>
-                    <ul className="product-list">
-                        {products.map(product => (
-                            <li key={product._id} className="product-item">
-                                {product.name} - {product.description} - ${product.price}
-                                <button className="edit-button" onClick={() => handleEditClick(product._id)}>Edit</button>
-                                <button className="delete-button" onClick={handleShowDeleteConfirmation}>Delete</button>
-                                {showDeleteConfirmation && (
-                                    <div className="delete-confirmation">
-                                        <p>Are you sure you want to delete this product?</p>
-                                        <button onClick={() => handleConfirmDelete(product._id)}>Yes</button>
-                                        <button onClick={handleCancelDelete}>No</button>
-                                    </div>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                </>
-            ) : (
-                <div className="warning-message">You do not have permission to manage products</div>
-            )}
+            <h2 className="product-management-title">Add/Edit Products</h2>
+            <ProductForm onSubmit={editingProductId ? handleEditProduct : handleAddProduct} initialValues={products.find(product => product._id === editingProductId)} />
+            {editingProductId && <button className="cancel-edit-button" onClick={handleCancelEdit}>Cancel Edit</button>}
+            <h2 className="product-management-title">Products</h2>
+            <ul className="product-list">
+                {products.map(product => (
+                    <li key={product._id} className="product-item">
+                        {product.name} - {product.description} - ${product.price}
+                        <button className="edit-button" onClick={() => handleEditClick(product._id)}>Edit</button>
+                        <button className="delete-button" onClick={() => handleShowDeleteConfirmation(product._id)}>Delete</button>
+                        {deleteConfirmationProductId === product._id && (
+                            <div className="delete-confirmation">
+                                <p>Are you sure you want to delete this product?</p>
+                                <button onClick={() => handleConfirmDelete(product._id)}>Yes</button>
+                                <button onClick={handleCancelDelete}>No</button>
+                            </div>
+                        )}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
