@@ -17,12 +17,12 @@
 }
 
 .product-image {
-    align-items: center;
-    width: 100%;
-    max-width: 400px;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 20px;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
 }
 
 .product-info {
@@ -71,21 +71,20 @@
 }
 
 .feedback-message {
-    background-color: #f0f4c3;
-    color: #245021;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-    font-size: 0.9em;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: inline-block;
-    transition: background-color 0.3s ease;
+  background-color: #f0f4c3;
+  color: #245021;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-size: 0.9em;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  transition: background-color 0.3s ease;
 }
 
 .feedback-message:hover {
-    background-color: #e6ee9c;
+  background-color: #e6ee9c;
 }
-
 
 .average-rating {
   font-size: 1rem;
@@ -125,36 +124,74 @@ li {
   color: #0056b3;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .product-details-container {
-    padding: 1rem;
-  }
-
-  .product-info h2 {
-    font-size: 1.5rem;
-  }
+.review-form {
+  width: 100%;
+  margin-top: 2rem;
 }
 
-@media (max-width: 480px) {
-  .product-info {
-    padding: 0 1rem;
-  }
+.review-form h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
 
-  .product-info h2,
-  .description,
-  .price,
-  .average-rating,
-  .customer-feedback h3 {
-    font-size: 1rem;
-  }
+.review-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
 
-  #quantity {
-    width: 40px;
-    padding: 0.3rem;
-  }
+.review-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
 
-  .add-to-cart {
-    padding: 0.3rem 0.6rem;
-  }
+.review-form button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.review-form button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: #d9534f;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.customer-feedback {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.customer-feedback h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 1rem;
+}
+
+.customer-feedback p {
+  margin-bottom: 0.5rem;
+}
+
+.customer-feedback p:last-child {
+  margin-bottom: 0; /* Remove bottom margin for the last paragraph */
 }

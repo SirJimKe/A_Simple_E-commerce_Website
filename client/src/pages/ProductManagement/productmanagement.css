@@ -24,6 +24,9 @@
     margin-bottom: 10px;
     border-radius: 4px;
     transition: box-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .product-item:hover {
@@ -36,7 +39,6 @@
     color: white;
     border: none;
     padding: 8px 12px;
-    margin-left: 10px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -59,4 +61,13 @@
 
 .cancel-edit-button:hover {
     background-color: #c82333;
+}
+
+.warning-message {
+    background-color: #ffc107;
+    color: #333;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 20px;
+    font-size: 1.2em;
 }

@@ -10,6 +10,9 @@ const ProductDetails = ({ cartItems }) => {
     const [quantity, setQuantity] = useState(1);
     const [feedbackMessage, setFeedbackMessage] = useState('');
     const [error, setError] = useState('');
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
+    const isAuthenticated = localStorage.getItem('token');
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -50,17 +53,28 @@ const ProductDetails = ({ cartItems }) => {
         setQuantity(1);
     };
 
-    const calculateAverageRating = () => {
-        if (!product || !product.rating) return 0;
-        const { rate, count } = product.rating;
-        return count === 0 ? 0 : (rate * count) / count;
+    const handleRatingChange = (e) => {
+        setRating(parseInt(e.target.value));
     };
 
-    const generateStars = (rating) => {
-        const roundedRating = Math.round(rating);
-        return Array.from({ length: roundedRating }, (_, i) => (
-            <span key={i}>&#9733;</span>
-        ));
+    const handleCommentChange = (e) => {
+        setComment(e.target.value);
+    };
+
+    const handleReviewSubmit = async (e) => {
+        e.preventDefault();
+        if (!isAuthenticated) {
+            setError('Please sign in to review this product.');
+            return;
+        }
+        // Here you can add logic to submit the review to the backend
+        // For demonstration purpose, let's just console log the review data
+        console.log('Rating:', rating);
+        console.log('Comment:', comment);
+        // Clear the form fields
+        setRating(0);
+        setComment('');
+        setFeedbackMessage('Review submitted successfully.');
     };
 
     if (error) {
@@ -84,10 +98,18 @@ const ProductDetails = ({ cartItems }) => {
                 <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} min="1" />
                 <button className="add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
                 {feedbackMessage && <p className="feedback-message">{feedbackMessage}</p>}
-                <p className="average-rating">
-                    Average Rating: {generateStars(calculateAverageRating())}
-                    {product.rating && product.rating.count === 0 && "This product has no ratings yet."}
-                </p>
+                {isAuthenticated && (
+                    <form onSubmit={handleReviewSubmit} className="review-form">
+                        <h3>Leave a Review</h3>
+                        <label htmlFor="rating">Rating:</label>
+                        <input type="number" id="rating" value={rating} onChange={handleRatingChange} min="1" max="5" />
+                        <label htmlFor="comment">Comment:</label>
+                        <textarea id="comment" value={comment} onChange={handleCommentChange}></textarea>
+                        <button type="submit">Submit Review</button>
+                        {error && <p className="error-message">{error}</p>}
+                    </form>
+                )}
+                {!isAuthenticated && <p>Please <Link to="/sign-in">sign in</Link> to review this product.</p>}
             </div>
             <Link to="/products" className="back-to-products">View Other Products</Link>
             <div className="customer-feedback">
@@ -98,7 +120,7 @@ const ProductDetails = ({ cartItems }) => {
                             <li key={index}>
                                 <div>
                                     <p>{comment.text}</p>
-                                    <p>Rating: {generateStars(comment.rating)}</p>
+                                    <p>Rating: {comment.rating}</p>
                                 </div>
                             </li>
                         ))}

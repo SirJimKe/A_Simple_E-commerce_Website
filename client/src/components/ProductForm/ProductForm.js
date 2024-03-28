@@ -5,10 +5,10 @@ const ProductForm = ({ onSubmit, initialValues }) => {
     const [formData, setFormData] = useState({
         name: '',
         description: '',
-        price: '',
+        price: null, // Initialize with null instead of ''
         imageUrl: '',
-	category: '',
-	quantity: ''
+        category: '',
+        quantity: null, // Initialize with null instead of ''
     });
 
     useEffect(() => {
@@ -31,10 +31,10 @@ const ProductForm = ({ onSubmit, initialValues }) => {
         setFormData({
             name: '',
             description: '',
-            price: '',
+            price: null, // Reset to null instead of ''
             imageUrl: '',
-	    category: '',
-	    quantity: ''
+            category: '',
+            quantity: null, // Reset to null instead of ''
         });
     };
 
@@ -50,19 +50,19 @@ const ProductForm = ({ onSubmit, initialValues }) => {
             </div>
             <div className="form-group">
                 <label htmlFor="price" className="form-label">Price:</label>
-                <input type="number" id="price" name="price" className="form-input" value={formData.price} onChange={handleChange} required />
+                <input type="number" id="price" name="price" className="form-input" value={formData.price || ''} onChange={handleChange} required />
             </div>
             <div className="form-group">
                 <label htmlFor="imageUrl" className="form-label">Image URL:</label>
                 <input type="text" id="imageUrl" name="imageUrl" className="form-input" value={formData.imageUrl} onChange={handleChange} required />
             </div>
-	    <div className="form-group">
+            <div className="form-group">
                 <label htmlFor="category" className="form-label">Category:</label>
                 <input type="text" id="category" name="category" className="form-input" value={formData.category} onChange={handleChange} required />
             </div>
             <div className="form-group">
                 <label htmlFor="quantity" className="form-label">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" className="form-input" value={formData.quantity} onChange={handleChange} required />
+                <input type="number" id="quantity" name="quantity" className="form-input" value={formData.quantity || ''} onChange={handleChange} required />
             </div>
             <button type="submit" className="form-button">{initialValues ? 'Update' : 'Add'} Product</button>
         </form>

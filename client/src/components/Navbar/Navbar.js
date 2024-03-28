@@ -4,7 +4,7 @@ import { CartContext } from '../../contexts/CartContext';
 import './navbar.css';
 
 const Navbar = ({ products }) => {
-    const isAuthenticated = localStorage.getItem('token');
+    const isAuthenticated = !!localStorage.getItem('token');
     const { cartItemCount } = useContext(CartContext);
     const navigate = useNavigate();
     const [searchQuery, setSearchQuery] = useState('');

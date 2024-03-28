@@ -13,8 +13,31 @@ import SearchResults from './components/SearchResults/SearchResults';
 
 const App = () => {
     const [products, setProducts] = useState([]);
+    const [userName, setUserName] = useState('');
+    const [userRole, setUserRole] = useState('');
 
     useEffect(() => {
+        const fetchUserRole = async () => {
+            try {
+		const token = localStorage.getItem('token');
+		if (!token) {
+                    throw new Error('Authorization token is missing');
+		}
+                const response = await fetch('/api/user/details', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                setUserName(data.username);
+                setUserRole(data.role);
+		console.log(data);
+            } catch (error) {
+                console.error('Error fetching user role:', error);
+            }
+        };
+
         const fetchProducts = async () => {
             try {
                 const response = await fetch('https://fakestoreapi.com/products');
@@ -25,6 +48,7 @@ const App = () => {
             }
         };
 
+        fetchUserRole();
         fetchProducts();
     }, []);
 
@@ -38,11 +62,11 @@ const App = () => {
                             <Route path="/cart" element={<Cart />} />
                             <Route path="/products" element={<ProductsPage />} />
                             <Route path="/products/:id" element={<ProductDetails />} />
-			    <Route path="/manage-products" element={<ProductManagement />} />
+                            <Route path="/manage-products" element={<ProductManagement userRole={userRole} />} />
                             <Route path="/sign-in" element={<SignIn />} />
                             <Route path="/sign-up" element={<SignUp />} />
                             <Route path="/search" element={<SearchResults products={products} />} />
-                            <Route path="/" element={<Home />} />
+                            <Route path="/" element={<Home />} userName={userName}/>
                         </Routes>
                     </div>
                 </div>
