@@ -50,7 +50,7 @@ const ProductDetails = ({ userId, cartItems }) => {
             quantity: quantity
         };
         addToCart(productToAdd);
-        setFeedbackMessage(`Added ${quantity} ${product.title} to cart`);
+        setFeedbackMessage(`Added ${quantity} ${product.name} to cart`);
         setQuantity(1);
     };
 
@@ -62,42 +62,49 @@ const ProductDetails = ({ userId, cartItems }) => {
         setComment(e.target.value);
     };
 
-    const handleReviewSubmit = async (e) => {
-       e.preventDefault();
-    if (!isAuthenticated) {
-        setError('Please sign in to review this product.');
-        return;
-    }
-
-    setIsSubmitting(true);
-    try {
-        const response = await fetch(`/api/reviews`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-            body: JSON.stringify({
-                productId: _id,
-                userId: userId,
-                rating,
-                comment,
-            }),
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to submit review');
+    const handleSubmitReview = async (e) => {
+        e.preventDefault();
+        if (!isAuthenticated) {
+            setError('Please sign in to review this product.');
+            return;
         }
 
-        setFeedbackMessage('Review submitted successfully.');
-        setRating(0);
-        setComment('');
-    } catch (error) {
-        setError(error.message);
-    } finally {
-        setIsSubmitting(false);
-    }
-};
+        setIsSubmitting(true);
+        try {
+            const response = await fetch(`/api/reviews`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                    productId: _id,
+		    userId: userId,
+                    rating,
+                    comment,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit review');
+            }
+
+            setFeedbackMessage('Review submitted successfully.');
+            setRating(0);
+            setComment('');
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const renderStars = (rating) => {
+	const roundedRating = Math.round(rating);
+        return Array.from({ length: roundedRating }, (_, i) => (
+            <span key={i}>&#9733;</span>
+        ));
+    };
 
     if (error) {
         return <div>{error}</div>;
@@ -116,18 +123,19 @@ const ProductDetails = ({ userId, cartItems }) => {
                 <h2>{product.name}</h2>
                 <p className="description">{product.description}</p>
                 <p className="price">Price: ${product.price}</p>
+                <p className="average-rating">Average Rating: {renderStars(product.averageRating)}</p>
                 <label htmlFor="quantity">Quantity:</label>
                 <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} min="1" />
                 <button className="add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
                 {feedbackMessage && <p className="feedback-message">{feedbackMessage}</p>}
                 {isAuthenticated && (
-                    <form onSubmit={handleReviewSubmit} className="review-form">
+                    <form onSubmit={handleSubmitReview} className="review-form">
                         <h3>Leave a Review</h3>
                         <label htmlFor="rating">Rating:</label>
                         <input type="number" id="rating" value={rating} onChange={handleRatingChange} min="1" max="5" />
                         <label htmlFor="comment">Comment:</label>
                         <textarea id="comment" value={comment} onChange={handleCommentChange}></textarea>
-                        <button type="submit">Submit Review</button>
+                        <button type="submit" disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit Review'}</button>
                         {error && <p className="error-message">{error}</p>}
                     </form>
                 )}
@@ -141,8 +149,8 @@ const ProductDetails = ({ userId, cartItems }) => {
                         {product.comments.map((comment, index) => (
                             <li key={index}>
                                 <div>
-                                    <p>{comment.text}</p>
-                                    <p>Rating: {comment.rating}</p>
+                                    <p>{comment.comment}</p>
+                                    <p>Rating: {renderStars(product.ratings[index].rating)}</p>
                                 </div>
                             </li>
                         ))}
