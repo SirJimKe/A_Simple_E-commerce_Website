@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { CartContext } from '../../contexts/CartContext';
 import './productdetails.css';
 
-const ProductDetails = ({ cartItems }) => {
+const ProductDetails = ({ userId, cartItems }) => {
     const { addToCart } = useContext(CartContext);
     const { _id } = useParams();
     const [product, setProduct] = useState(null);
@@ -12,6 +12,7 @@ const ProductDetails = ({ cartItems }) => {
     const [error, setError] = useState('');
     const [rating, setRating] = useState(0);
     const [comment, setComment] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const isAuthenticated = localStorage.getItem('token');
 
     useEffect(() => {
@@ -62,20 +63,41 @@ const ProductDetails = ({ cartItems }) => {
     };
 
     const handleReviewSubmit = async (e) => {
-        e.preventDefault();
-        if (!isAuthenticated) {
-            setError('Please sign in to review this product.');
-            return;
+       e.preventDefault();
+    if (!isAuthenticated) {
+        setError('Please sign in to review this product.');
+        return;
+    }
+
+    setIsSubmitting(true);
+    try {
+        const response = await fetch(`/api/reviews`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({
+                productId: _id,
+                userId: userId,
+                rating,
+                comment,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to submit review');
         }
-        // Here you can add logic to submit the review to the backend
-        // For demonstration purpose, let's just console log the review data
-        console.log('Rating:', rating);
-        console.log('Comment:', comment);
-        // Clear the form fields
+
+        setFeedbackMessage('Review submitted successfully.');
         setRating(0);
         setComment('');
-        setFeedbackMessage('Review submitted successfully.');
-    };
+    } catch (error) {
+        setError(error.message);
+    } finally {
+        setIsSubmitting(false);
+    }
+};
 
     if (error) {
         return <div>{error}</div>;

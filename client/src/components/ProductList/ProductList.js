@@ -22,6 +22,7 @@ const ProductList = ({ products, onSelectProduct }) => {
                     <div className="product-info">
                         <h3 className="product-title">{product.name}</h3>
                         <p className="product-price">${product.price}</p>
+			<p className="product-quantity">{product.quantity} items left</p>
                     </div>
                 </div>
             ))}

@@ -10,7 +10,7 @@ export const getUserDetails = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        res.status(200).json({ username: user.username, role: user.role });
+        res.status(200).json({ userId: user._id, username: user.username, role: user.role });
     } catch (error) {
         console.error('Error fetching user details:', error);
         res.status(500).json({ message: 'Internal server error' });

@@ -15,6 +15,7 @@ const App = () => {
     const [products, setProducts] = useState([]);
     const [userName, setUserName] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [userId, setUserId] = useState('');
 
     useEffect(() => {
 	const fetchData = async () => {
@@ -34,8 +35,7 @@ const App = () => {
 		const userData = await userResponse.json();
 		setUserName(userData.username);
 		setUserRole(userData.role);
-
-		// Fetch products
+		setUserId(userData.userId);
 		const productsResponse = await fetch('/api/products');
 		const productsData = await productsResponse.json();
 		setProducts(productsData);
@@ -56,7 +56,7 @@ const App = () => {
                         <Routes>
                             <Route path="/cart" element={<Cart />} />
                             <Route path="/products" element={<ProductsPage />} />
-                            <Route path="/products/:_id" element={<ProductDetails />} />
+                            <Route path="/products/:_id" element={<ProductDetails userId={userId} />} />
                             <Route path="/manage-products" element={<ProductManagement userRole={userRole} />} />
                             <Route path="/sign-in" element={<SignIn />} />
                             <Route path="/sign-up" element={<SignUp />} />
